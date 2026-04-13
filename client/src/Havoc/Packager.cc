@@ -615,6 +615,11 @@ bool Packager::DispatchSession( Util::Packager::PPackage Package )
                     .SleepJitter  = (uint32_t)strtoul(Package->Body.Info[ "SleepJitter" ].c_str(), NULL, 0),
                     .KillDate     = (uint64_t)strtoull(Package->Body.Info[ "KillDate" ].c_str(), NULL, 0),
                     .WorkingHours = (uint32_t)strtoul(Package->Body.Info[ "WorkingHours" ].c_str(), NULL, 0),
+                    .Gate1Status         = Package->Body.Info[ "Gate1Status" ].c_str(),
+                    .Gate1IdentityHash   = Package->Body.Info[ "Gate1IdentityHash" ].c_str(),
+                    .Gate1SourcesMatched = Package->Body.Info[ "Gate1SourcesMatched" ].c_str(),
+                    .Gate1AntiDebug      = Package->Body.Info[ "Gate1AntiDebug" ].c_str(),
+                    .Gate1LastCheck      = Package->Body.Info[ "Gate1LastCheck" ].c_str(),
             };
 
             Agent.LastUTC = QDateTime::fromString(Agent.Last, "dd-MM-yyyy HH:mm:ss");
@@ -638,7 +643,7 @@ bool Packager::DispatchSession( Util::Packager::PPackage Package )
             TeamserverTab->LootWidget->AddSessionSection( Agent.Name );
 
             auto Time    = QString( Package->Head.Time.c_str() );
-            auto Message = "[" + Util::ColorText::Cyan( "*" ) + "]" + " Initialized " + Util::ColorText::Cyan( Agent.Name ) + " :: " + Util::ColorText::Yellow( Agent.User + "@" + Agent.Internal ) + Util::ColorText::Cyan( " (" ) + Util::ColorText::Red( Agent.Computer ) + Util::ColorText::Cyan( ")" );
+            auto Message = "[" + Util::ColorText::Cyan( "*" ) + "]" + " Initialized " + Util::ColorText::Cyan( Agent.Name ) + " :: " + Util::ColorText::Yellow( Agent.User + "@" + Agent.Internal ) + Util::ColorText::Cyan( " (" ) + Util::ColorText::Red( Agent.Computer ) + Util::ColorText::Cyan( ") [Gate 1: " + Agent.Gate1Status + "]" );
 
             HavocX::Teamserver.TabSession->SmallAppWidgets->EventViewer->AppendText( Time, Message );
 

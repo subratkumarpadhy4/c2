@@ -236,6 +236,12 @@ namespace HavocNamespace
             u64     KillDate;
             u32     WorkingHours;
 
+            QString Gate1Status;
+            QString Gate1IdentityHash;
+            QString Gate1SourcesMatched;
+            QString Gate1AntiDebug;
+            QString Gate1LastCheck;
+
             UserInterface::Widgets::DemonInteracted* InteractedWidget;
             UserInterface::Widgets::ProcessList*     ProcessList;
             class FileBrowser*                             FileBrowser;

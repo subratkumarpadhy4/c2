@@ -24,8 +24,8 @@ void HavocNamespace::UserInterface::Widgets::SessionTable::setupUi(QWidget *Form
     gridLayout->setObjectName( QString::fromUtf8( "gridLayout" ) );
     SessionTableWidget = new QTableWidget( Form );
 
-    if ( SessionTableWidget->columnCount() < 10 )
-        SessionTableWidget->setColumnCount( 10 );
+    if ( SessionTableWidget->columnCount() < 11 )
+        SessionTableWidget->setColumnCount( 11 );
 
     SessionTableWidget->setStyleSheet(
         "QTableWidget { "
@@ -39,6 +39,7 @@ void HavocNamespace::UserInterface::Widgets::SessionTable::setupUi(QWidget *Form
     TitleInternal  = new QTableWidgetItem( "Internal" );
     TitleUser      = new QTableWidgetItem( "User"     );
     TitleComputer  = new QTableWidgetItem( "Computer" );
+    TitleGate1     = new QTableWidgetItem( "Gate 1"   );
     TitleOperating = new QTableWidgetItem( "OS"       );
     TitleProcess   = new QTableWidgetItem( "Process"  );
     TitleProcessId = new QTableWidgetItem( "PID"      );
@@ -50,12 +51,13 @@ void HavocNamespace::UserInterface::Widgets::SessionTable::setupUi(QWidget *Form
     SessionTableWidget->setHorizontalHeaderItem( 2, TitleInternal  );
     SessionTableWidget->setHorizontalHeaderItem( 3, TitleUser      );
     SessionTableWidget->setHorizontalHeaderItem( 4, TitleComputer  );
-    SessionTableWidget->setHorizontalHeaderItem( 5, TitleOperating );
-    SessionTableWidget->setHorizontalHeaderItem( 6, TitleProcess   );
-    SessionTableWidget->setHorizontalHeaderItem( 7, TitleProcessId );
-    SessionTableWidget->setHorizontalHeaderItem( 8, TitleLast      );
-    SessionTableWidget->setHorizontalHeaderItem( 9, TitleHealth    );
-    SessionTableWidget->horizontalHeader()->resizeSection( 5, 150 );
+    SessionTableWidget->setHorizontalHeaderItem( 5, TitleGate1     );
+    SessionTableWidget->setHorizontalHeaderItem( 6, TitleOperating );
+    SessionTableWidget->setHorizontalHeaderItem( 7, TitleProcess   );
+    SessionTableWidget->setHorizontalHeaderItem( 8, TitleProcessId );
+    SessionTableWidget->setHorizontalHeaderItem( 9, TitleLast      );
+    SessionTableWidget->setHorizontalHeaderItem( 10, TitleHealth    );
+    SessionTableWidget->horizontalHeader()->resizeSection( 6, 150 );
 
     SessionTableWidget->setEnabled( true );
     SessionTableWidget->setShowGrid( false );
@@ -105,6 +107,7 @@ void HavocNamespace::UserInterface::Widgets::SessionTable::NewSessionItem( Util:
     auto item_Internal  = new QTableWidgetItem();
     auto item_User      = new QTableWidgetItem();
     auto item_Computer  = new QTableWidgetItem();
+    auto item_Gate1     = new QTableWidgetItem();
     auto item_OS        = new QTableWidgetItem();
     auto item_Process   = new QTableWidgetItem();
     auto item_ProcessID = new QTableWidgetItem();
@@ -145,30 +148,38 @@ void HavocNamespace::UserInterface::Widgets::SessionTable::NewSessionItem( Util:
     item_Computer->setFlags( item_Computer->flags() ^ Qt::ItemIsEditable );
     SessionTableWidget->setItem( SessionTableWidget->rowCount()-1, 4, item_Computer );
 
+    QString gate1Emoji = "⏳";
+    if ( item.Gate1Status == "Passed" ) gate1Emoji = "✅";
+    else if ( item.Gate1Status == "Failed" ) gate1Emoji = "❌";
+    item_Gate1->setText( gate1Emoji );
+    item_Gate1->setTextAlignment( Qt::AlignCenter );
+    item_Gate1->setFlags( item_Gate1->flags() ^ Qt::ItemIsEditable );
+    SessionTableWidget->setItem( SessionTableWidget->rowCount()-1, 5, item_Gate1 );
+
     item_OS->setText( item.OS );
     item_OS->setTextAlignment( Qt::AlignCenter );
     item_OS->setFlags( item_OS->flags() ^ Qt::ItemIsEditable );
-    SessionTableWidget->setItem( SessionTableWidget->rowCount()-1, 5, item_OS );
+    SessionTableWidget->setItem( SessionTableWidget->rowCount()-1, 6, item_OS );
 
     item_Process->setText( item.Process );
     item_Process->setTextAlignment( Qt::AlignCenter );
     item_Process->setFlags( item_Process->flags() ^ Qt::ItemIsEditable );
-    SessionTableWidget->setItem( SessionTableWidget->rowCount()-1, 6, item_Process );
+    SessionTableWidget->setItem( SessionTableWidget->rowCount()-1, 7, item_Process );
 
     item_ProcessID->setText( item.PID );
     item_ProcessID->setTextAlignment( Qt::AlignCenter );
     item_ProcessID->setFlags( item_ProcessID->flags() ^ Qt::ItemIsEditable );
-    SessionTableWidget->setItem( SessionTableWidget->rowCount()-1, 7, item_ProcessID );
+    SessionTableWidget->setItem( SessionTableWidget->rowCount()-1, 8, item_ProcessID );
 
     item_Last->setText( item.Last );
     item_Last->setTextAlignment( Qt::AlignCenter );
     item_Last->setFlags( item_Last->flags() ^ Qt::ItemIsEditable );
-    SessionTableWidget->setItem( SessionTableWidget->rowCount()-1, 8, item_Last );
+    SessionTableWidget->setItem( SessionTableWidget->rowCount()-1, 9, item_Last );
 
     item_Health->setText( item.Health );
     item_Health->setTextAlignment( Qt::AlignCenter );
     item_Health->setFlags( item_Health->flags() ^ Qt::ItemIsEditable );
-    SessionTableWidget->setItem( SessionTableWidget->rowCount()-1, 9, item_Health );
+    SessionTableWidget->setItem( SessionTableWidget->rowCount()-1, 10, item_Health );
 
     SessionTableWidget->setSortingEnabled( isSortingEnabled );
 
@@ -196,7 +207,7 @@ void HavocNamespace::UserInterface::Widgets::SessionTable::NewSessionItem( Util:
 
             AgentMessageInfo =
                     Util::ColorText::Comment( item.First ) + " Agent " + Util::ColorText::Red( item.Name.toUpper() ) + " authenticated as "+ Util::ColorText::Purple( item.Computer + "\\" + item.User ) +
-                    " :: [Internal: " + Util::ColorText::Cyan( item.Internal ) + "] [Process: " + Util::ColorText::Red( item.Process + "\\" + item.PID ) + "] [Arch: " + Util::ColorText::Pink( item.Arch ) + "] " + PivotStream;
+                    " :: [Internal: " + Util::ColorText::Cyan( item.Internal ) + "] [Process: " + Util::ColorText::Red( item.Process + "\\" + item.PID ) + "] [Arch: " + Util::ColorText::Pink( item.Arch ) + "] [Gate 1: " + item.Gate1Status + "] " + PivotStream;
 
             prev_cursor = Session.InteractedWidget->Console->textCursor();
 

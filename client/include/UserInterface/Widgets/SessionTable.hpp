@@ -15,6 +15,7 @@ private:
     QTableWidgetItem*   TitleExternal    = nullptr;
     QTableWidgetItem*   TitleUser        = nullptr;
     QTableWidgetItem*   TitleComputer    = nullptr;
+    QTableWidgetItem*   TitleGate1       = nullptr;
     QTableWidgetItem*   TitleOperating   = nullptr;
     QTableWidgetItem*   TitleProcess     = nullptr;
     QTableWidgetItem*   TitleProcessId   = nullptr;
